@@ -479,6 +479,77 @@ nav.bottom-nav button,.bottom-nav button{
 }
 </style>
 </head>
+
+<style>
+/* ===== Modern Dashboard REAL layout ===== */
+.md-dashboard{padding:0 20px 4px}
+.md-hero{
+ background:linear-gradient(135deg,#123f30 0%,#1d7655 100%);
+ color:#fff;border-radius:24px;padding:22px 22px 17px;
+ box-shadow:0 12px 28px rgba(18,63,48,.18);
+}
+.md-hero-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.md-kicker{font-size:12px;color:#cfe8dc;font-weight:650;margin-bottom:4px}
+.md-hero-amount{font-size:34px;line-height:1.1;font-weight:850;letter-spacing:-1px}
+.md-over{font-size:13px;color:#ffb4b1}
+.md-hero-month{font-size:12px;color:#d9eee5;padding:7px 10px;border:1px solid rgba(255,255,255,.16);border-radius:10px}
+.md-progress{height:7px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;margin-top:20px}
+.md-progress span{display:block;height:100%;background:#bfe8d6;border-radius:99px}
+.md-hero-foot{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:#cfe8dc}
+
+.md-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.md-kpi{background:#fff;border:1px solid #e5eae7;border-radius:16px;padding:13px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 14px rgba(20,38,29,.04)}
+.md-kpi-icon{width:34px;height:34px;border-radius:11px;background:#eaf5f0;color:#176b4d;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:800}
+.md-kpi-icon.expense{background:#fff1f0;color:#b94a48}
+.md-kpi-icon.save{background:#f3f1ff;color:#6655b5}
+.md-kpi-label{font-size:10px;color:#818b85}
+.md-kpi-value{font-size:16px;font-weight:800;margin-top:2px}
+
+.md-main-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin-top:12px}
+.md-today,.md-saving{background:#fff;border:1px solid #e5eae7;border-radius:20px;padding:17px;box-shadow:0 4px 16px rgba(20,38,29,.04)}
+.md-card-head{display:flex;justify-content:space-between;align-items:center}
+.md-card-title{font-size:15px;font-weight:800}
+.md-card-sub{font-size:10px;color:#87918b;margin-top:2px}
+.md-today-badge{font-size:10px;font-weight:700;color:#176b4d;background:#eaf5f0;border-radius:99px;padding:6px 9px}
+.md-today-body{display:flex;align-items:center;gap:22px;margin-top:17px}
+.md-ring{width:128px;height:128px;flex:0 0 128px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#176b4d var(--pct),#e9efec 0)}
+.md-ring>div{width:94px;height:94px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.md-ring strong{font-size:20px;font-weight:850}
+.md-ring small{font-size:9px;color:#87918b;margin-top:2px}
+.md-today-stats{flex:1;display:grid;gap:9px}
+.md-today-stats div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #f0f2f1;padding-bottom:7px}
+.md-today-stats span{font-size:10px;color:#87918b}
+.md-today-stats strong{font-size:12px}
+.md-add-link{border:0;background:#eaf5f0;color:#176b4d;padding:7px 10px;font-size:11px;cursor:pointer}
+.md-saving-list{display:grid;gap:6px;margin-top:13px}
+.md-saving-row{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:8px 9px;background:#f7f9f8;border-radius:10px}
+.md-saving-total{display:flex;justify-content:space-between;border-top:1px solid #edf0ee;margin-top:11px;padding-top:10px;font-size:11px;color:#77827c}
+.md-saving-total strong{font-size:16px;color:#176b4d}
+.md-empty{font-size:12px;color:#9aa39e;padding:24px 0}
+@media(max-width:768px){
+ .md-dashboard{padding:0 10px 2px}
+ .md-hero{border-radius:20px;padding:18px}
+ .md-hero-amount{font-size:30px}
+ .md-kpis{gap:7px}
+ .md-kpi{padding:10px 8px;gap:7px}
+ .md-kpi-icon{width:30px;height:30px;font-size:16px}
+ .md-kpi-value{font-size:13px}
+ .md-main-grid{grid-template-columns:1fr}
+ .md-today-body{gap:15px}
+ .md-ring{width:110px;height:110px;flex-basis:110px}
+ .md-ring>div{width:82px;height:82px}
+}
+@media(max-width:390px){
+ .md-kpi{display:block;text-align:center}
+ .md-kpi-icon{margin:0 auto 5px}
+ .md-kpi-value{font-size:12px}
+ .md-today-body{gap:10px}
+ .md-ring{width:100px;height:100px;flex-basis:100px}
+ .md-ring>div{width:76px;height:76px}
+ .md-ring strong{font-size:17px}
+}
+</style>
+
 <body>
 <div id="root"></div>
 <script type="text/babel">
@@ -1471,71 +1542,75 @@ function App() {
           </div>
         </div>
 
-        <div className="cards-row">
-          <div className="balance-card">
-            <div style={{fontSize:12,fontWeight:700,color:"#D1FAE5",marginBottom:8}}>📌 งบใช้จ่ายเดือนนี้</div>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",gap:8}}>
-              <div style={{fontSize:22,fontWeight:800,color:budgetRemaining<0?"#FCA5A5":"#fff"}}>฿{fmt(Math.abs(budgetRemaining))}{budgetRemaining<0&&" เกิน"}</div>
-              <span style={{fontSize:10,color:"#D1FAE5"}}>คำนวณอัตโนมัติ</span>
-            </div>
-            <div style={{fontSize:10,color:"#D1FAE5",marginBottom:7}}>รายรับ ฿{fmt(income)} − ออม ฿{fmt(totalSavings)} − รายจ่ายประจำ ฿{fmt(totalFixed)} · รายวันใช้ไป {budgetPct.toFixed(0)}%</div>
-            <div className="progress-bar" style={{background:"rgba(255,255,255,.15)",marginBottom:10}}><div className="progress-fill" style={{width:`${Math.min(100,budgetPct)}%`,background:budgetPct>100?"#FCA5A5":budgetPct>=80?"#FBBF24":"#B7E4C7"}}/></div>
-            <div className="balance-label">💵 เงินคงเหลือที่จ่ายได้อีก</div>
-            <div className="balance-amount" style={{color:remaining<0?"#FCA5A5":"#fff"}}>
-              ฿{fmt(Math.abs(remaining))}{remaining<0&&<span style={{fontSize:14,marginLeft:6}}>⚠️ เกินงบ</span>}
-            </div>
-            <div className="balance-sub">รายได้ ฿{fmt(income)} − เงินออม ฿{fmt(totalSavings)} − รายจ่ายประจำ ฿{fmt(totalFixed)} − รายวัน ฿{fmt(totalVar)}</div>
-            <div className="balance-row">
-              <div className="balance-mini"><div className="bm-label">รายจ่ายคงที่</div><div className="bm-val">฿{fmt(totalFixed)}</div></div>
-              <div className="balance-mini"><div className="bm-label">รายวัน</div><div className="bm-val">฿{fmt(totalVar)}</div></div>
-              <div className="balance-mini">
-                <div className="bm-label">งบรายวันเหลือ</div>
-                <div className="bm-val" style={{color:varBudget-totalVar<0?"#FCA5A5":"#fff"}}>฿{fmt(varBudget-totalVar)}</div>
+        {/* ═══ MODERN DASHBOARD HOME ═══ */}
+        <div className="md-dashboard">
+          <div className="md-hero">
+            <div className="md-hero-top">
+              <div>
+                <div className="md-kicker">เงินคงเหลือที่ใช้ได้</div>
+                <div className="md-hero-amount">฿{fmt(Math.abs(remaining))}{remaining<0&&<span className="md-over"> เกินงบ</span>}</div>
               </div>
+              <div className="md-hero-month">{MONTH_SHORT[month-1]} {year}</div>
             </div>
-            <div style={{marginTop:12,padding:"12px 14px",borderRadius:14,background:"rgba(255,255,255,.10)",border:"1px solid rgba(255,255,255,.10)"}}>
-              <div style={{fontSize:11,color:"#D1FAE5",fontWeight:700}}>📅 งบใช้ได้ต่อวัน</div>
-
-              <div style={{display:"flex",alignItems:"baseline",gap:6,marginTop:2}}>
-                <span style={{fontSize:25,fontWeight:800,color:remaining<0?"#FCA5A5":"#fff"}}>฿{fmt(todayAllowance)}</span>
-                <span style={{fontSize:10,color:"#D1FAE5"}}>/ วัน</span>
-              </div>
-              <div style={{fontSize:10,color:"#D1FAE5",marginTop:2}}>เงินจริงคงเหลือ ฿{fmt(Math.max(0,remaining))} ÷ {daysLeft} วัน{isCurrentMonth?"ที่เหลือ (รวมวันนี้)":"ในเดือนนี้"} · งบวันนี้ล็อกแล้ว</div>
-              <div style={{marginTop:7,fontSize:12,color:todayRemaining>=0?"#D1FAE5":"#FCA5A5"}}>
-                วันนี้ใช้ไป ฿{fmt(todaySpent)} · <strong>{todayRemaining>=0?`เหลือใช้วันนี้ ฿${fmt(todayRemaining)}`:`เกินงบวันนี้ ฿${fmt(Math.abs(todayRemaining))}`}</strong>
-              </div>
+            <div className="md-progress"><span style={{width:`${Math.min(100,Math.max(0,budgetPct))}%`}}/></div>
+            <div className="md-hero-foot">
+              <span>ใช้ไป {budgetPct.toFixed(0)}%</span>
+              <span>งบใช้จ่าย ฿{fmt(Math.max(0,budgetRemaining))}</span>
             </div>
           </div>
 
-          <div className="goal-card">
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-              <span style={{fontSize:13,fontWeight:700,color:"#1B4332"}}>🏦 เงินออม</span>
-              <button className="sm-btn" onClick={addSavingItem}>+ เพิ่มออม</button>
+          <div className="md-kpis">
+            <div className="md-kpi">
+              <div className="md-kpi-icon">↗</div>
+              <div><div className="md-kpi-label">รายรับ</div><div className="md-kpi-value">฿{fmt(income)}</div></div>
             </div>
-            {savingItems.length===0 ? (
-              <div className="empty-box" style={{padding:"12px 4px"}}>ยังไม่มีรายการออม<br/><span style={{fontSize:11}}>กด “+ เพิ่มออม” เพื่อเพิ่ม เช่น ลงทุน, รักษา</span></div>
-            ) : (
-              <div style={{display:"grid",gap:8}}>
-                {savingItems.map(e=>(
-                  <div key={e.id} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",background:"#F8FAFC",borderRadius:10}}>
-                    <span style={{flex:1}}>
-                      <Editable value={e.name} onSave={v=>saveSavingName(e.id,v)} isText style={{fontSize:13,fontWeight:600,color:"#374151"}}/>
-                    </span>
-                    <Editable value={e.amount} onSave={v=>saveSavingAmt(e.id,v)} prefix="฿" style={{fontSize:14,fontWeight:700,color:"#1B4332"}}/>
-                    <button className="icon-del" onClick={()=>delSavingItem(e.id)}>×</button>
-                  </div>
-                ))}
+            <div className="md-kpi">
+              <div className="md-kpi-icon expense">↘</div>
+              <div><div className="md-kpi-label">รายจ่าย</div><div className="md-kpi-value">฿{fmt(totalFixed+totalVar)}</div></div>
+            </div>
+            <div className="md-kpi">
+              <div className="md-kpi-icon save">○</div>
+              <div><div className="md-kpi-label">เงินออม</div><div className="md-kpi-value">฿{fmt(totalSavings)}</div></div>
+            </div>
+          </div>
+
+          <div className="md-main-grid">
+            <div className="md-today">
+              <div className="md-card-head">
+                <div><div className="md-card-title">งบวันนี้</div><div className="md-card-sub">วันนี้ {todayDay} {MONTH_SHORT[month-1]}</div></div>
+                <div className="md-today-badge">{todayRemaining>=0?"เหลือ":"เกิน"}</div>
               </div>
-            )}
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:10,paddingTop:10,borderTop:"1px solid #F3F4F6"}}>
-              <span style={{fontSize:12,color:"#6B7280"}}>ออมทั้งหมด / เดือน</span>
-              <span style={{fontSize:18,fontWeight:700,color:"#1B4332"}}>฿{fmt(totalSavings)}</span>
+              <div className="md-today-body">
+                <div className="md-ring" style={{"--pct":`${Math.min(100,Math.max(0,todayAllowance>0?(todaySpent/todayAllowance)*100:0))}%`}}>
+                  <div><strong>฿{fmt(Math.max(0,todayRemaining))}</strong><small>เหลือวันนี้</small></div>
+                </div>
+                <div className="md-today-stats">
+                  <div><span>งบวันนี้</span><strong>฿{fmt(todayAllowance)}</strong></div>
+                  <div><span>ใช้ไป</span><strong>฿{fmt(todaySpent)}</strong></div>
+                  <div><span>งบรายวันเหลือ</span><strong>฿{fmt(Math.max(0,varBudget-totalVar))}</strong></div>
+                </div>
+              </div>
             </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{width:`${goalPct}%`,background:"#1B4332"}}/>
-            </div>
-            <div style={{fontSize:11,color:"#9CA3AF",marginTop:5}}>
-              คิดเป็น {goalPct.toFixed(0)}% ของรายได้ · เหลือเป็นงบใช้จ่าย ฿{fmt(spendableBudget)}
+
+            <div className="md-saving">
+              <div className="md-card-head">
+                <div><div className="md-card-title">เงินออม</div><div className="md-card-sub">{goalPct.toFixed(0)}% ของรายรับ</div></div>
+                <button className="md-add-link" onClick={addSavingItem}>+ เพิ่ม</button>
+              </div>
+              {savingItems.length===0 ? (
+                <div className="md-empty">ยังไม่มีรายการออม</div>
+              ) : (
+                <div className="md-saving-list">
+                  {savingItems.map(e=>(
+                    <div className="md-saving-row" key={e.id}>
+                      <span><Editable value={e.name} onSave={v=>saveSavingName(e.id,v)} isText style={{fontSize:13,fontWeight:650,color:"#26352d"}}/></span>
+                      <Editable value={e.amount} onSave={v=>saveSavingAmt(e.id,v)} prefix="฿" style={{fontSize:14,fontWeight:800,color:"#176b4d"}}/>
+                      <button className="icon-del" onClick={()=>delSavingItem(e.id)}>×</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="md-saving-total"><span>ออมทั้งหมด</span><strong>฿{fmt(totalSavings)}</strong></div>
             </div>
           </div>
         </div>
