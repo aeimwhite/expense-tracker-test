@@ -1311,38 +1311,11 @@ function App() {
     : baseTodayAllowance;
   const todayRemaining = Math.max(0, todayAllowance - todaySpent);
 
-  useEffect(()=>{
-    if(!todaySnapshotKey || !syncReady) return;
+  // ไม่เขียน/แก้ snapshot อัตโนมัติจาก render อีกต่อไป
+  // เพื่อป้องกันค่าเริ่มต้นที่เกิดก่อนข้อมูลเดือนถูกโหลดครบ (เช่น 650.96)
+  // ถ้ามี snapshot จาก Import/ข้อมูลเดิม ให้ใช้ค่านั้นตรง ๆ
+  // ถ้าไม่มี snapshot จึงใช้ remaining ÷ daysLeft ชั่วคราว
 
-    // เวอร์ชันเก่าบางไฟล์เคยคำนวณงบวันนี้ผิด (เอารายจ่ายวันนี้มาบวกกลับ)
-    // ถ้ายังไม่มี snapshot version 2 ให้ล้างเฉพาะ snapshot ของวันนี้แล้วสร้างใหม่
-    // จาก "เงินจริงคงเหลือ ณ ตอนที่เปิดใช้งานครั้งแรกของวันนี้"
-    let current = dailyBudgetSnapshots;
-    let changed = false;
-
-    if(dailyBudgetSnapshotVersion < 2 && current[todaySnapshotKey] != null){
-      current = {...current};
-      delete current[todaySnapshotKey];
-      changed = true;
-    }
-
-    // สร้าง snapshot เฉพาะครั้งแรกที่ยังไม่มีค่า
-    // หลังจากสร้างแล้วต้องล็อกไว้ตลอดวัน แม้มีการเพิ่ม/แก้รายจ่ายประจำ
-    // หรือมี state อื่นเปลี่ยน
-    if(current[todaySnapshotKey] == null){
-      const initialAllowance = daysLeft > 0
-        ? Math.max(0, remaining + todaySpent) / daysLeft
-        : 0;
-      current = {...current, [todaySnapshotKey]: initialAllowance};
-      changed = true;
-    }
-
-    if(dailyBudgetSnapshotVersion < 2 || changed){
-      setDailyBudgetSnapshots(current);
-      setDailyBudgetSnapshotVersion(2);
-      saveMonth(null,null,null,null,current);
-    }
-  },[todaySnapshotKey,syncReady,dailyBudgetSnapshotVersion,todaySpent,remaining,daysLeft]);
 
   const prevMonth = ()=>{ if(month===1){setMonth(12);setYear(y=>y-1);}else setMonth(m=>m-1); };
   const nextMonth = ()=>{ if(month===12){setMonth(1);setYear(y=>y+1);}else setMonth(m=>m+1); };
@@ -1527,7 +1500,7 @@ function App() {
                 <span style={{fontSize:25,fontWeight:800,color:remaining<0?"#FCA5A5":"#fff"}}>฿{fmt(todayAllowance)}</span>
                 <span style={{fontSize:10,color:"#D1FAE5"}}>/ วัน</span>
               </div>
-              <div style={{fontSize:10,color:"#D1FAE5",marginTop:2}}>เงินจริงคงเหลือ ฿{fmt(Math.max(0,remaining))} ÷ {daysLeft} วัน{isCurrentMonth?"ที่เหลือ (รวมวันนี้)":"ในเดือนนี้"}</div>
+              <div style={{fontSize:10,color:"#D1FAE5",marginTop:2}}>เงินจริงคงเหลือ ฿{fmt(Math.max(0,remaining))} ÷ {daysLeft} วัน{isCurrentMonth?"ที่เหลือ (รวมวันนี้)":"ในเดือนนี้"} · งบวันนี้ล็อกแล้ว</div>
               <div style={{marginTop:7,fontSize:12,color:todayRemaining>=0?"#D1FAE5":"#FCA5A5"}}>
                 วันนี้ใช้ไป ฿{fmt(todaySpent)} · <strong>{todayRemaining>=0?`เหลือใช้วันนี้ ฿${fmt(todayRemaining)}`:`เกินงบวันนี้ ฿${fmt(Math.abs(todayRemaining))}`}</strong>
               </div>
