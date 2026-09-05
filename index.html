@@ -1302,14 +1302,13 @@ function App() {
   const savedTodayAllowance = todaySnapshotKey
     ? Number(dailyBudgetSnapshots[todaySnapshotKey])
     : NaN;
-  // ถ้าวันนี้ยังไม่มีรายจ่าย ให้ยึดเงินจริงคงเหลือปัจจุบันเป็นจุดตั้งต้น
-  // เพื่อแก้ snapshot เก่าที่ผิด โดยไม่ทำให้ snapshot เปลี่ยนหลังเริ่มใช้เงินแล้ว
+  // งบวันนี้ต้องล็อกค่าทันทีที่มี snapshot แล้ว
+  // ห้ามคำนวณใหม่ทุกครั้งที่ state ของรายรับ/รายจ่ายประจำเปลี่ยน
+  // เพราะ state อาจยังโหลดไม่ครบชั่วคราวและทำให้ snapshot กระโดดไปเป็นค่าผิด
   const baseTodayAllowance = daysLeft > 0 ? Math.max(0, remaining) / daysLeft : 0;
-  const todayAllowance = todaySpent === 0
-    ? baseTodayAllowance
-    : (Number.isFinite(savedTodayAllowance) && savedTodayAllowance >= 0
-        ? savedTodayAllowance
-        : baseTodayAllowance);
+  const todayAllowance = Number.isFinite(savedTodayAllowance) && savedTodayAllowance >= 0
+    ? savedTodayAllowance
+    : baseTodayAllowance;
   const todayRemaining = Math.max(0, todayAllowance - todaySpent);
 
   useEffect(()=>{
@@ -1327,16 +1326,13 @@ function App() {
       changed = true;
     }
 
-    // ถ้าวันนี้ยังไม่ได้ใช้เงิน ให้ซ่อม snapshot เป็นสูตรเงินจริงคงเหลือ ÷ วันที่เหลือ
-    // ถ้าใช้ไปแล้ว จะคง snapshot เดิมไว้ เพื่อไม่ให้งบวันนี้ลดตามรายการที่เพิ่ม
-    if(todaySpent === 0){
-      const initialAllowance = daysLeft > 0 ? Math.max(0, remaining) / daysLeft : 0;
-      if(current[todaySnapshotKey] !== initialAllowance){
-        current = {...current, [todaySnapshotKey]: initialAllowance};
-        changed = true;
-      }
-    } else if(current[todaySnapshotKey] == null){
-      const initialAllowance = daysLeft > 0 ? Math.max(0, remaining + todaySpent) / daysLeft : 0;
+    // สร้าง snapshot เฉพาะครั้งแรกที่ยังไม่มีค่า
+    // หลังจากสร้างแล้วต้องล็อกไว้ตลอดวัน แม้มีการเพิ่ม/แก้รายจ่ายประจำ
+    // หรือมี state อื่นเปลี่ยน
+    if(current[todaySnapshotKey] == null){
+      const initialAllowance = daysLeft > 0
+        ? Math.max(0, remaining + todaySpent) / daysLeft
+        : 0;
       current = {...current, [todaySnapshotKey]: initialAllowance};
       changed = true;
     }
