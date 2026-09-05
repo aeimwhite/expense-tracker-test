@@ -1150,18 +1150,40 @@ function App() {
   };
 
   const saveMonth = (fixed, daily, paid, savingsList, budgetSnapshots) => {
-    const data={
-      fixedExpenses: fixed ?? fixedExpenses,
-      daily: daily ?? dailyEntries,
-      paid:  paid  ?? paidFixed,
-      savingItems: savingsList ?? savingItems,
-      dailyBudgetSnapshots: budgetSnapshots ?? dailyBudgetSnapshots,
-      dailyBudgetSnapshotVersion: 2,
+    // Local-first: อ่านข้อมูลล่าสุดจาก localStorage ก่อนทุกครั้ง
+    // เพื่อป้องกันการบันทึกด้วย state เก่าทับข้อมูลส่วนอื่นของเดือน
+    const current = lsGet(monthKey) || {};
+    const data = {
+      ...current,
+      fixedExpenses: fixed !== null && fixed !== undefined
+        ? fixed
+        : (current.fixedExpenses ?? fixedExpenses),
+      daily: daily !== null && daily !== undefined
+        ? daily
+        : (current.daily ?? dailyEntries),
+      paid: paid !== null && paid !== undefined
+        ? paid
+        : (current.paid ?? paidFixed),
+      savingItems: savingsList !== null && savingsList !== undefined
+        ? savingsList
+        : (current.savingItems ?? savingItems),
+      dailyBudgetSnapshots: budgetSnapshots !== null && budgetSnapshots !== undefined
+        ? budgetSnapshots
+        : (current.dailyBudgetSnapshots ?? dailyBudgetSnapshots),
+      dailyBudgetSnapshotVersion: Number(
+        current.dailyBudgetSnapshotVersion ?? dailyBudgetSnapshotVersion ?? 2
+      ),
       _updatedAt: Date.now(),
     };
-    localWriteVersionRef.current.set(monthKey, (localWriteVersionRef.current.get(monthKey)||0) + 1);
-    lsSet(monthKey,data);
-    queueCloudSave(monthKey,data);
+
+    localWriteVersionRef.current.set(
+      monthKey,
+      (localWriteVersionRef.current.get(monthKey) || 0) + 1
+    );
+    lsSet(monthKey, data);
+
+    // เวอร์ชันนี้ปิด Google Sync อยู่ จึงไม่มีการส่งข้อมูลออก
+    queueCloudSave(monthKey, data);
     setIsNewMonth(false);
   };
   const exportBackup = () => {
@@ -1338,7 +1360,7 @@ function App() {
   };
   const addFixed = ()=>{
     if(!fxName.trim()||!fxAmt) return;
-    const nf=[...fixedExpenses,{id:mkid(),name:fxName.trim(),amount:Number(fxAmt)}];
+    const nf=[...fixedExpenses,{id:mkid(),name:fxName.trim(),amount:Number(fxAmt),category:CATEGORIES[0]}];
     setFixed(nf); saveMonth(nf,null,null); setFxName(""); setFxAmt("");
   };
   const delDaily = (day,idx)=>{
