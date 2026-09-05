@@ -811,7 +811,7 @@ function App() {
   const mk = (y,m) => `raijai_${y}-${String(m).padStart(2,"0")}`;
   const monthKey = mk(year,month);
 
-  const validSyncUrl = url => /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/i.test(String(url||"").trim());
+  const validSyncUrl = url => false;
   const cloudPost = async (key, data, url=syncUrl) => {
     const endpoint=String(url||"").trim();
     if(!validSyncUrl(endpoint)) return {ok:false,error:"URL ไม่ถูกต้อง"};
@@ -1762,17 +1762,6 @@ function App() {
         
         {!activeMonths.length&&<div className="section" style={{marginTop:20}}><div className="list-box"><div className="empty-box">ยังไม่มีข้อมูลในปี {ovYear}<br/>เริ่มบันทึกในแท็บ "รายเดือน" ได้เลยครับ</div></div></div>}
       </>)}
-
-      <div className="sync-panel">
-        <div className="sync-title">☁️ Google Sync — ใช้ข้อมูลเดียวกันบน PC และมือถือ</div>
-        <div className="sync-desc">วาง URL ของ Google Apps Script Web App (ลงท้าย /exec) ครั้งเดียวต่ออุปกรณ์ หลังจากนั้นการแก้ข้อมูลจะอัปขึ้นคลาวด์อัตโนมัติ</div>
-        <div className="sync-row">
-          <input className="sync-input" value={syncUrl} onChange={e=>setSyncUrl(e.target.value)} placeholder="https://script.google.com/macros/s/.../exec"/>
-          <button className="backup-btn" style={{flex:"0 0 auto"}} onClick={saveSyncUrl}>บันทึก URL</button>
-          <button className="backup-btn" style={{flex:"0 0 auto"}} disabled={syncBusy} onClick={()=>syncNow()}>{syncBusy?"กำลังซิงก์…":"🔄 ซิงก์ตอนนี้"}</button>
-        </div>
-        {syncStatus&&<div className={`sync-status${syncStatus.startsWith("✅")?" ok":syncStatus.startsWith("❌")?" err":""}`}>{syncStatus}</div>}
-      </div>
 
       <div className="backup-row">
         <button className="backup-btn" onClick={exportBackup}>⬇️ Export / สำรองข้อมูล</button>
